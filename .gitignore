@@ -1,0 +1,11 @@
+.venv/
+
+.env
+
+.vscode/
+*.pyc
+__pycache__/
+
+*.db
+
+aiogram-bot\spam_detection\model\model.safetensors
