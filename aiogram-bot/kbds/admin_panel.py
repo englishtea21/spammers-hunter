@@ -6,7 +6,16 @@ from aiogram.types import InlineKeyboardButton
 
 from text_utils import text_generator, text
 
+from kbds.reply import get_keyboard
+
 # admin panel keyboards and pagination for chat button list
+
+ADMIN_KB = get_keyboard(
+    text.text_templates["ADMIN_PRIVATE_CHAT"]["OPTIONS"]["CHECK_CHATS"],
+    text.text_templates["ADMIN_PRIVATE_CHAT"]["OPTIONS"]["EXIT_ADMIN_MODE"],
+    placeholder=text.text_templates["PLACEHOLDERS"]["SELECT_OPTION"],
+    sizes=(2, 1),
+)
 
 CHATS_PER_PAGE = 5
 

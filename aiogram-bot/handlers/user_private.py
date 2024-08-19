@@ -24,21 +24,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 
-ADMIN_KB = get_keyboard(
-    text.text_templates["ADMIN_PRIVATE_CHAT"]["OPTIONS"]["CHECK_CHATS"],
-    text.text_templates["ADMIN_PRIVATE_CHAT"]["OPTIONS"]["EXIT_ADMIN_MODE"],
-    placeholder=text.text_templates["PLACEHOLDERS"]["SELECT_OPTION"],
-    sizes=(2, 1),
-)
-
-USER_KB = get_keyboard(
-    text.text_templates["USER_PRIVATE_CHAT"]["OPTIONS"]["HOW_TO"],
-    text.text_templates["USER_PRIVATE_CHAT"]["OPTIONS"]["ABOUT_PROJECT"],
-    text.text_templates["USER_PRIVATE_CHAT"]["OPTIONS"]["CHANGE_LANGUAGE"],
-    text.text_templates["USER_PRIVATE_CHAT"]["OPTIONS"]["TO_ADMIN_MODE"],
-    placeholder=text.text_templates["PLACEHOLDERS"]["SELECT_OPTIONS_BELOW"],
-    sizes=(2, 2),
-)
+from kbds import user_panel, admin_panel
 
 # router for first-time work with antispam bot in private chat
 user_private_router = Router()
@@ -49,7 +35,11 @@ user_private_router.message.filter(ChatTypeFilter(["private"]))
 async def start_cmd(message: types.Message, state: FSMContext):
     await message.answer(
         text_generator.start_message(),
-        reply_markup=USER_KB,
+        reply_markup=user_panel.USER_KB,
+    )
+    await message.answer(
+        text.text_templates["USER_PRIVATE_CHAT"]["START_SETTING_ME"],
+        reply_markup=user_panel.ADD_TO_GROUPS,
     )
 
 
@@ -79,7 +69,9 @@ async def repo_cmd(message: types.Message):
     )
 )
 async def help_cmd(message: types.Message, session: AsyncSession):
-    await message.answer(text_generator.instructions_message())
+    await message.answer(
+        text_generator.instructions_message(), reply_markup=user_panel.ADD_TO_GROUPS
+    )
 
 
 # transfers the user to the admin panel
@@ -105,5 +97,5 @@ async def to_admin_mode_cmd(
     else:
         await message.answer(
             text=text.text_templates["USER_PRIVATE_CHAT"]["ANSWERS"]["ADMIN_ON"],
-            reply_markup=ADMIN_KB,
+            reply_markup=admin_panel.ADMIN_KB,
         )

@@ -22,7 +22,7 @@ from filters.chat_types import ChatTypeFilter, AdminPrivateFilter
 
 from aiogram.enums.chat_type import ChatType
 
-from handlers.user_private import ADMIN_KB, USER_KB
+from kbds import user_panel
 
 from kbds.inline import get_callback_btns
 from kbds.reply import get_keyboard
@@ -284,7 +284,7 @@ async def exit_admin_mode_cmd(message: types.Message, state: FSMContext):
     await close_panel(state, message.bot, message.chat.id, "current_chat_pannel_id")
     await message.answer(
         text=text.text_templates["ADMIN_PRIVATE_CHAT"]["ANSWERS"]["SEE_YOU"],
-        reply_markup=USER_KB,
+        reply_markup=user_panel.USER_KB,
     )
 
     await state.clear()
