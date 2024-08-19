@@ -31,12 +31,14 @@ from kbds.admin_panel import build_admin_chats_page, build_chat_info_markup
 from text_utils import text, text_generator
 
 
+# fsm states for admin panel
 class AdminState(StatesGroup):
     selecting_chat_from_list = State()
     browsing_chat_info = State()
     waiting_for_punishment_duration = State()
 
 
+# router for handling actions in admin panel
 admin_private_router = Router()
 admin_private_router.message.filter(ChatTypeFilter(["private"]), AdminPrivateFilter())
 
@@ -53,6 +55,7 @@ async def close_panel(state: FSMContext, bot, chat_id, panel_key: str):
             pass
 
 
+# retrieves all admin chats in a paginated button list
 @admin_private_router.message(
     or_f(
         Command("my_admin_chats"),
@@ -83,6 +86,7 @@ async def send_admin_chats_page(message: types.Message, page: int, admin_chats):
     )
 
 
+# implements arrow swithing on chats button list
 @admin_private_router.callback_query(
     and_f(
         lambda c: c.data.startswith("admin_chats_page:"),
@@ -102,6 +106,7 @@ async def change_admin_chats_page(callback_query: CallbackQuery, state: FSMConte
     await callback_query.answer()
 
 
+# retrieves antispam chat info with control panel
 @admin_private_router.callback_query(
     and_f(
         lambda c: c.data.startswith("chat_info:"),
@@ -159,6 +164,7 @@ async def send_chat_info_page(message: types.Message, chat_info):
     )
 
 
+# general wrapper for toggle chat commands
 async def toggle_chat_setting(
     callback_query: CallbackQuery,
     state: FSMContext,
@@ -182,6 +188,7 @@ async def toggle_chat_setting(
     await callback_query.answer(text_func(chat_info))
 
 
+# toggles antispam active status
 @admin_private_router.callback_query(
     and_f(
         lambda c: c.data == "toggle_antispam",
@@ -200,6 +207,7 @@ async def toggle_antispam(
     )
 
 
+# toggles punishment way
 @admin_private_router.callback_query(
     and_f(
         lambda c: c.data == "toggle_punishment",
@@ -218,6 +226,7 @@ async def toggle_punishment(
     )
 
 
+# updates punishment duration
 @admin_private_router.callback_query(
     and_f(
         lambda c: c.data == "enter_punishment_duration",
@@ -236,6 +245,7 @@ async def change_punishment_duration(callback_query: CallbackQuery, state: FSMCo
     await state.set_state(AdminState.waiting_for_punishment_duration)
 
 
+# handling written punishment duration by user
 @admin_private_router.message(StateFilter(AdminState.waiting_for_punishment_duration))
 async def handle_change_punishment_duration(
     message: types.Message, state: FSMContext, session: AsyncSession
@@ -259,6 +269,7 @@ async def handle_change_punishment_duration(
     await state.set_state(AdminState.browsing_chat_info)
 
 
+# exits from the admin panel
 @admin_private_router.message(
     or_f(
         Command("exit_admin_mode"),

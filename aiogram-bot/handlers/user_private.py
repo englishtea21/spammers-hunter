@@ -40,7 +40,7 @@ USER_KB = get_keyboard(
     sizes=(2, 2),
 )
 
-
+# router for first-time work with antispam bot in private chat
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(["private"]))
 
@@ -53,6 +53,7 @@ async def start_cmd(message: types.Message, state: FSMContext):
     )
 
 
+# sends link to project repository
 @user_private_router.message(
     or_f(
         Command("repo"),
@@ -70,6 +71,7 @@ async def repo_cmd(message: types.Message):
     )
 
 
+# sends instruction for bot setting in chats
 @user_private_router.message(
     or_f(
         Command("help"),
@@ -80,6 +82,7 @@ async def help_cmd(message: types.Message, session: AsyncSession):
     await message.answer(text_generator.instructions_message())
 
 
+# transfers the user to the admin panel
 @user_private_router.message(
     or_f(
         Command("to_admin_mode"),

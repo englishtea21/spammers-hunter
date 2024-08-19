@@ -21,6 +21,7 @@ class Base(DeclarativeBase):
     )
 
 
+# an instance of banned user
 class BannedUser(Base):
     __tablename__ = "banned_users"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -39,6 +40,7 @@ class BannedUser(Base):
     )
 
 
+# an instance of muted user
 class MutedUser(Base):
     __tablename__ = "muted_users"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -56,13 +58,13 @@ class MutedUser(Base):
     )
 
 
-# Определяем перечисление
+# punishment for spam
 class Punishment(Enum):
     BAN = 0
     MUTE = 1
 
 
-# добавляет всех админов в служебную бд для предоставления полномочий
+# an instance of chat administrator who are provided with the control panel
 class ChatAdmin(Base):
     __tablename__ = "chats_admins"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -75,7 +77,7 @@ class ChatAdmin(Base):
     )
 
 
-# Обновляем модель AntiSpamChat
+# an instance of chat where antispam bot works
 class AntiSpamChat(Base):
     __tablename__ = "antispam_chats"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -84,9 +86,12 @@ class AntiSpamChat(Base):
     punishment: Mapped[Punishment] = mapped_column(
         SqlaEnum(Punishment), default=Punishment.MUTE
     )
+    
+    # The duration of the punishment is determined by the number of hours provided.
+    # If the punishment is for an indefinite period, it will be indicated as "none".
     punishment_duration: Mapped[int] = mapped_column(
         BigInteger, nullable=True, default=60 * 60 * 24
-    )  # Продолжительность бана в секундах, None если постоянный
+    )
 
     banned_users: Mapped[list[BannedUser]] = relationship(
         "BannedUser", back_populates="chat"

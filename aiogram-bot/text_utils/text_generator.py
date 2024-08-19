@@ -1,6 +1,8 @@
 import text_utils.text
 import database.models as models
 
+# implements formatted text generation according to context
+
 
 def start_message():
     return (

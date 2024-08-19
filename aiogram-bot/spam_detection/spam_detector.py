@@ -3,19 +3,18 @@ from transformers import DistilBertTokenizer, DistilBertForSequenceClassificatio
 
 import os
 
+# implements basic interface of spam detector
+
 
 class SpamDetector:
     def __init__(self):
         # Initialize tokenizer and model
 
-        print(os.path.abspath("./aiogram-bot/spam_detection/tokenizer"))
-        print(os.path.abspath("./aiogram-bot/spam_detection/model"))
-
         self.tokenizer = DistilBertTokenizer.from_pretrained(
-            "./aiogram-bot/spam_detection/tokenizer"
+            os.getenv("TOKENIZER_PATH")
         )
         self.model = DistilBertForSequenceClassification.from_pretrained(
-            "./aiogram-bot/spam_detection/model"
+            os.getenv("MODEL_PATH")
         )
 
         # Set the device for model inference
@@ -23,6 +22,7 @@ class SpamDetector:
         self.model.to(self.device)
         self.model.eval()
 
+    # checks whether the text is spam with built text tokenization
     def is_spam(self, text: str) -> bool:
         inputs = self.tokenizer(
             text, return_tensors="pt", truncation=True, padding=True

@@ -19,8 +19,6 @@ from handlers.admin_group import admin_group_router
 from handlers.admin_private import admin_private_router
 from handlers.bot_group import bot_group_router
 
-from common.bot_cmds_list import private
-
 from spam_detection.spam_detector import SpamDetector
 
 
@@ -38,6 +36,7 @@ dp.include_router(bot_group_router)
 
 
 async def on_startup(bot):
+    # binding spam_detector instance to bot on startup
     bot.spam_detector = SpamDetector()
 
     run_param = False

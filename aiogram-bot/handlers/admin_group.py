@@ -17,6 +17,7 @@ from database.orm_query import (
 
 from text_utils import text
 
+# router for admins commands handling in antispam chat
 admin_group_router = Router()
 admin_group_router.message.filter(ChatTypeFilter(["group", "supergroup"]))
 admin_group_router.edited_message.filter(ChatTypeFilter(["group", "supergroup"]))
@@ -26,6 +27,8 @@ admin_group_router.message.filter(
 )
 
 
+# handling command for the first time bot registration with retrieving all admins from chat
+# also can be used to turn on bot later
 @admin_group_router.message(Command("start_spam_hunting"))
 async def start_spam_hunting(message: types.Message, bot: Bot, session: AsyncSession):
     chat_id = message.chat.id
@@ -65,6 +68,7 @@ async def start_spam_hunting(message: types.Message, bot: Bot, session: AsyncSes
     )
 
 
+# temporary disabling bot action in chat
 @admin_group_router.message(Command("end_spam_hunting"))
 async def end_spam_hunting(message: types.Message, bot: Bot, session: AsyncSession):
     chat_id = message.chat.id

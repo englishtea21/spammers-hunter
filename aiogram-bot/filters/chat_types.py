@@ -28,7 +28,7 @@ class AdminOrOwnerFilter(Filter):
             return False
 
 
-# for private chat with bot
+# for private chat with bot - ensures that only appropriate user gets admin pannel
 class AdminPrivateFilter(Filter):
     async def __call__(self, message: types.Message, session: AsyncSession) -> bool:
         user_id = message.from_user.id

@@ -45,10 +45,8 @@ async def check_for_spam(message: types.Message, session: AsyncSession):
         return
 
     if message.bot.spam_detector.is_spam(message.text):
-        # if message.text == "чебурек":
-        # await message.delete()
-        await message.answer("Как тебе не стыдно!")
-        # await punish_user(message.from_user, chat_info, session)
+        await message.delete()
+        await punish_user(message.from_user, chat_info, session)
 
 
 async def punish_user(
