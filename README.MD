@@ -2,6 +2,10 @@
 
 This project is a Telegram bot designed to protect groups from spam using a classification model based on DistilBERT (multi-language cased) from transformers package. The bot utilizes a machine learning model trained to identify spam messages in both English and Russian, along with other languages, to ensure effective spam detection in various contexts.
 
+## Try It Out
+
+Users can try out this project here: [Try the Project](https://t.me/SpammersHunterBot)
+
 ## Features
 
 - **Spam Detection**: Identifies and handles spam messages in Telegram groups.
@@ -26,6 +30,17 @@ These datasets contain a variety of spam messages, including SMS spam, and featu
 - **Sequence Length**: The model training took into account the fundamental limitations on sequence length, specifically the maximum message length in Telegram.
 - **Special Characters**: The training data includes a large number of emojis and special characters to ensure robustness in the Telegram environment.
 
+## Database Model
+
+The project includes a database model with the following objects:
+
+- **Anti-Spam Chats**: Represents chats where spam protection is active.
+- **Anti-Spam Chat Admins**: Information about users managing spam protection settings in chats.
+- **Banned Users**: List of users banned for spam.
+- **Muted Users**: List of users temporarily muted from sending messages.
+
+Initially, the project was tested with PostgreSQL using schema building through SQLAlchemy.
+
 ## Libraries Used
 
 - **Telegram Bot Framework**:
@@ -46,5 +61,9 @@ These datasets contain a variety of spam messages, including SMS spam, and featu
   - `asyncpg==0.29.0`
   - `dogpile.cache==1.3.3`
 
-- **Other**:
+- **Timezone dealing**:
   - `pytz==2024.1`
+
+## License
+
+This project is licensed under the terms specified in the [LICENSE.md](LICENSE.md) file
