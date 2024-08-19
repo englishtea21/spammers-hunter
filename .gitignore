@@ -8,4 +8,4 @@ __pycache__/
 
 *.db
 
-aiogram-bot\spam_detection\model\model.safetensors
+aiogram-bot/spam_detection/model/model.safetensors
