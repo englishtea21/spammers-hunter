@@ -66,4 +66,4 @@ Initially, the project was tested with PostgreSQL using schema building through 
 
 ## License
 
-This project is licensed under the terms specified in the [LICENSE.md](LICENSE.md) file
+This project is licensed under the terms specified in the [LICENSE.MD](LICENSE.MD) file
