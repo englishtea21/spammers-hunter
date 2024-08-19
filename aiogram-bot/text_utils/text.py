@@ -1,6 +1,8 @@
 from os import getenv
 import yaml
 
+# implements localization
+
 # load languages dict
 with open(
     f"{getenv('LANGUAGES_DICT_PATH')}",

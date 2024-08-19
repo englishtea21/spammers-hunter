@@ -39,7 +39,7 @@ def get_server_time():
 
 # calculates till time from nom
 def get_till_time(duration: int):
-    get_server_time() + timedelta(hours=duration)
+    return get_server_time() + timedelta(hours=duration)
 
 
 async def orm_add_admin_chat(session: AsyncSession, data: dict):
@@ -191,9 +191,8 @@ async def orm_add_banned_user(
 ):
     banned_user = BannedUser(chat_id=chat_id, user_id=user_id, banned_till=banned_till)
 
-    async with session() as sess:
-        sess.add(banned_user)
-        await sess.commit()
+    session.add(banned_user)
+    await session.commit()
 
 
 async def orm_add_muted_user(
@@ -201,9 +200,8 @@ async def orm_add_muted_user(
 ):
     muted_user = MutedUser(chat_id=chat_id, user_id=user_id, muted_till=muted_till)
 
-    async with session() as sess:
-        sess.add(muted_user)
-        await sess.commit()
+    session.add(muted_user)
+    await session.commit()
 
 
 async def orm_get_banned_users(session: AsyncSession, chat_id: int):

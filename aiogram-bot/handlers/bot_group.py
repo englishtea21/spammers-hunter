@@ -46,7 +46,7 @@ async def check_for_spam(message: types.Message, session: AsyncSession):
 
     if message.bot.spam_detector.is_spam(message.text):
         await message.delete()
-        await punish_user(message.from_user, chat_info, session)
+        await punish_user(message.bot, message.from_user, chat_info, session)
 
 
 async def punish_user(
@@ -57,14 +57,16 @@ async def punish_user(
     if chat_info.punishment_duration is not None:
         punished_till = get_till_time(chat_info.punishment_duration)
 
-    if chat_info.punishemnt == Punishment.BAN:
-        await orm_add_muted_user(session, chat_info.chat_id, user.id, punished_till)
-        await bot.ban_chat_member(chat_info.chat_id, user.id, punished_till)
-    elif chat_info.punish_user == Punishment.MUTE:
-        await orm_add_banned_user(session, chat_info.chat_id, user.id, punished_till)
-        await bot.restrict_chat_member(
+    if chat_info.punishment == Punishment.BAN:
+        if await bot.ban_chat_member(chat_info.chat_id, user.id, punished_till):
+            await orm_add_muted_user(session, chat_info.chat_id, user.id, punished_till)
+    elif chat_info.punishment == Punishment.MUTE:
+        if await bot.restrict_chat_member(
             chat_id=chat_info.chat_id,
             user_id=user.id,
             permissions=types.ChatPermissions(),
             until_date=punished_till,
-        )
+        ):
+            await orm_add_banned_user(
+                session, chat_info.chat_id, user.id, punished_till
+            )
