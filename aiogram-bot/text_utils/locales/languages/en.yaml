@@ -1,0 +1,31 @@
+START:
+  WELLCOME: "Hi, mushroom picker 🍄!\n\nI love mushroom photos 📸, and I want to help people pick them up 🛻, and want them not to poison themselves 💀...\n\nFollow the instructions on the buttons and quickly send me a photo of your mushroom for inspection 👁️!"
+  SELECT_LANGUAGE: "Select the language, mushroom picker 🍄"
+  LANGUAGE_SELECTED: "Selected language: {}"
+
+SELECT_OPTIONS_BELOW: "Choose the option below or send the mushroom photo 🍄"
+
+OPTIONS:
+  PHOTO_REQUIREMENTS_QUESTION: "What should the picture be? 📸"
+  IMPORTANT_QUESTION: "What'’'s important about mushrooms? ‼️🤓"
+  MUSHROOMS_BASE_QUESTION: "What database of mushrooms does bot use? 🤖"
+  ABOUT_PROJECT_QUESTION: "Want to know more about project 👀"
+  CHANGE_LANGUAGE: "Change the language 🌐"
+
+ANSWERS:
+  PHOTO_REQUIREMENTS: "The mushroom 🍄 should be in the center of the image. 🎯\n\nPhoto should be taken:\n- in the light ☀️\n- close to the mushroom (15-20 cm), so you can clearly see the fungus’s foot and hat 🎩\n\nWaiting for a picture 📸"
+  MUSHROOMS_BASE: "You can read about it <a href='{}'>here</a>. 💁‍♂️"
+  ABOUT_PROJECT: "Sure! Go to <a href='{}'>project repository</a> 👾"
+  IMPORTANT: "Mushrooms 🍄 - a very diverse (more than 100 thousand species) kingdom of living organisms.\n\nSo it is possible that many of them are missing from our photo database 🥲.\n\nThe mushroom bot is just your assistant. 💁‍♂️\n\nThe decision to eat 🍽️ mushrooms is yours alone."
+
+PHOTO_STAGES:
+  PHOTO_REQUEST: "Waiting for a picture 🍄📸"
+  PHOTO_PROCESSING: "So. Started scanning the mushroom...\nWhat have we got here? 🔎"
+
+RESULT_MESSAGE_TEMPLATES:
+  RESULT_TEMPLATE: "<b>Scan results 👀</b>\n\nMade the top 3 options that can be your mushroom, mushroom picker 🍄:\n\n"
+  RESULT_BULLET_LI: "{} ➡️ {}"
+  NOT_FOUND: "\nNothing found 🥲, search by yourself"
+  LINK_TEMPLATE: "<a href='{}'>{}</a>"
+  PLATFORM_SEARCH_TEMPLATE: "<a href='{}'>link</a> to inaturalist"
+  FIRST_ARTICLE: "\nFirst <a href='{}'> article</a> on inaturalist searching"
