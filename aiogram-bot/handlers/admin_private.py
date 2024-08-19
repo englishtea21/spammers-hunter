@@ -50,7 +50,7 @@ async def close_panel(state: FSMContext, bot, chat_id, panel_key: str):
     if panel_id is not None:
         try:
             await bot.delete_message(chat_id=chat_id, message_id=panel_id)
-            await state.update_data(panel_key=None)
+            await state.update_data({panel_key: None})
         except:
             pass
 
@@ -205,6 +205,7 @@ async def toggle_antispam(
         orm_toggle_anti_spam_chat_is_enabled,
         lambda info: text_generator.toggle_spam_performed(info.is_enabled),
     )
+    await callback_query.answer()
 
 
 # toggles punishment way
@@ -224,6 +225,7 @@ async def toggle_punishment(
         orm_toggle_anti_spam_chat_punishment,
         lambda info: text_generator.toggle_punishment_performed(info.punishment),
     )
+    await callback_query.answer()
 
 
 # updates punishment duration
@@ -234,15 +236,13 @@ async def toggle_punishment(
     )
 )
 async def change_punishment_duration(callback_query: CallbackQuery, state: FSMContext):
-    await state.update_data(
-        current_chat_id=(await state.get_data()).get("current_chat_id")
-    )
     await callback_query.message.answer(
         text.text_templates["ADMIN_PRIVATE_CHAT"]["CHAT_INFO_MODIFY"]["ANSWERS"][
             "WRITE_PUNISHMENT_DURATION"
         ],
     )
     await state.set_state(AdminState.waiting_for_punishment_duration)
+    await callback_query.answer()
 
 
 # handling written punishment duration by user
