@@ -4,5 +4,4 @@ COPY requirements.txt requirements.txt
 # Установка зависимостей напрямую в основной Python среде
 RUN pip install --upgrade setuptools && \
     pip install -r requirements.txt
-RUN chmod 755 .
 COPY . .
