@@ -10,11 +10,11 @@ from aiogram.utils.formatting import (
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import AntiSpamChat, Punishment, BannedUser, MutedUser
 
-from filters.chat_types import ChatTypeFilter
+from bot.filters.chat_types import ChatTypeFilter
 
-from kbds.reply import get_keyboard
+from bot.kbds.reply import get_keyboard
 
-from text_utils import text
+from bot.text_utils import text
 
 from os import getenv
 

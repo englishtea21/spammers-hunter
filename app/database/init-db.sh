@@ -13,4 +13,4 @@ if [ -z "$(psql -tAc "SELECT 1 FROM pg_database WHERE datname='$POSTGRES_DB'")" 
   EOSQL
 else
   echo "Database already exists, skipping initialization."
-fi
+if

@@ -4,9 +4,9 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from aiogram.types import InlineKeyboardButton
 
-from text_utils import text_generator, text
+from bot.text_utils import text_generator, text
 
-from kbds.reply import get_keyboard
+from bot.kbds.reply import get_keyboard
 
 # admin panel keyboards and pagination for chat button list
 

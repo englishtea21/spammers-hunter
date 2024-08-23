@@ -12,11 +12,11 @@ from database.orm_query import orm_is_user_admin
 
 # from database.orm_query import orm_get_products  # Italic, as_numbered_list и тд
 
-from filters.chat_types import ChatTypeFilter
+from bot.filters.chat_types import ChatTypeFilter
 
-from kbds.reply import get_keyboard
+from bot.kbds.reply import get_keyboard
 
-from text_utils import text, text_generator
+from bot.text_utils import text, text_generator
 
 from os import getenv
 
@@ -24,7 +24,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 
-from kbds import user_panel, admin_panel
+from bot.kbds import user_panel, admin_panel
 
 # router for first-time work with antispam bot in private chat
 user_private_router = Router()

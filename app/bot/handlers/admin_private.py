@@ -18,17 +18,17 @@ from database.orm_query import (
     orm_update_anti_spam_chat,
 )
 
-from filters.chat_types import ChatTypeFilter, AdminPrivateFilter
+from bot.filters.chat_types import ChatTypeFilter, AdminPrivateFilter
 
 from aiogram.enums.chat_type import ChatType
 
-from kbds import user_panel
+from bot.kbds import user_panel
 
-from kbds.inline import get_callback_btns
-from kbds.reply import get_keyboard
-from kbds.admin_panel import build_admin_chats_page, build_chat_info_markup
+from bot.kbds.inline import get_callback_btns
+from bot.kbds.reply import get_keyboard
+from bot.kbds.admin_panel import build_admin_chats_page, build_chat_info_markup
 
-from text_utils import text, text_generator
+from bot.text_utils import text, text_generator
 
 
 # fsm states for admin panel

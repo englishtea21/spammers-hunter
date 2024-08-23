@@ -1,7 +1,8 @@
 version: '3.7'
 services:
   db:
-    image: postgres:16-alpine
+    build:
+      context: app\database\
     env_file:
       - ./.env
     volumes:
@@ -11,8 +12,8 @@ services:
       - "5432:5432"
 
   bot:
-    build: .
-    command: sh -c "python aiogram-bot/app.py"
+    build: 
+      context: app\bot\
     env_file:
       - ./.env
     environment:

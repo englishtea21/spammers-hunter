@@ -1,4 +1,4 @@
-import text_utils.text
+from bot.text_utils.text import text_templates
 import database.models as models
 
 # implements formatted text generation according to context
@@ -63,12 +63,12 @@ def toggle_punishment_button(punishment: models.Punishment):
 
 
 def punishment_duration_set_successfully(punishment_duration: int):
-    return text_utils.text.text_templates["ADMIN_PRIVATE_CHAT"]["CHAT_INFO_MODIFY"][
+    return text_templates["ADMIN_PRIVATE_CHAT"]["CHAT_INFO_MODIFY"][
         "ANSWERS"
     ]["PUNISHMENT_DURATION_SET_SUCCESSFULLY"].format(
         punishment_duration
         if punishment_duration != 0
-        else text_utils.text.text_templates["ADMIN_PRIVATE_CHAT"]["CHAT_INFO_MODIFY"][
+        else text_templates["ADMIN_PRIVATE_CHAT"]["CHAT_INFO_MODIFY"][
             "ANSWERS"
         ]["FOREVER"]
     )

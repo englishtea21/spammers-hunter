@@ -10,16 +10,16 @@ from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
-from middlewares.db import DataBaseSession
+from bot.middlewares.db import DataBaseSession
 
 from database.engine import create_db, drop_db, session_maker
 
-from handlers.user_private import user_private_router
-from handlers.admin_group import admin_group_router
-from handlers.admin_private import admin_private_router
-from handlers.bot_group import bot_group_router
+from bot.handlers.user_private import user_private_router
+from bot.handlers.admin_group import admin_group_router
+from bot.handlers.admin_private import admin_private_router
+from bot.handlers.bot_group import bot_group_router
 
-from spam_detection.spam_detector import SpamDetector
+from bot.spam_detection.spam_detector import SpamDetector
 
 
 bot = Bot(

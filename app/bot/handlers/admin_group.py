@@ -3,7 +3,7 @@ from string import punctuation
 from aiogram import Bot, types, Router
 from aiogram.filters import Command, ChatMemberUpdatedFilter
 
-from filters.chat_types import ChatTypeFilter, AdminOrOwnerFilter
+from bot.filters.chat_types import ChatTypeFilter, AdminOrOwnerFilter
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +15,7 @@ from database.orm_query import (
     orm_toggle_anti_spam_chat_is_enabled,
 )
 
-from text_utils import text
+from bot.text_utils import text
 
 # router for admins commands handling in antispam chat
 admin_group_router = Router()
