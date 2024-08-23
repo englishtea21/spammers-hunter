@@ -21,13 +21,9 @@ def load_text_templates(lang_code):
     if lang_code is None:
         lang_code = "ru"
 
-    print(f"Lang_code: {lang_code}")
+    lang_file = f"{lang_code}.yaml"
 
-    curr_language_path = path.join(
-        current_dir, "locales", "languages", f"{lang_code}.yaml"
-    )
-
-    print(f"Curr_language_path: {curr_language_path}")
+    curr_language_path = path.join(current_dir, "locales", "languages", lang_file)
 
     with open(
         curr_language_path,
