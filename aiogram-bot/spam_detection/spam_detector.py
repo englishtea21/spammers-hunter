@@ -7,15 +7,17 @@ import os
 
 current_dir = os.path.dirname(__file__)
 
+model_path = os.path.join(current_dir, "model")
+
+tokenizer_path = os.path.join(current_dir, "tokenizer")
+
 
 class SpamDetector:
     def __init__(self):
         # Initialize tokenizer and model
 
-        self.tokenizer = DistilBertTokenizer.from_pretrained(f"{current_dir}/tokenizer")
-        self.model = DistilBertForSequenceClassification.from_pretrained(
-            f"{current_dir}/model"
-        )
+        self.tokenizer = DistilBertTokenizer.from_pretrained(tokenizer_path)
+        self.model = DistilBertForSequenceClassification.from_pretrained(model_path)
 
         # Set the device for model inference
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

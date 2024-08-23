@@ -6,8 +6,9 @@ import yaml
 current_dir = path.dirname(__file__)
 
 # load languages dict
+languages_dict_path = path.join(current_dir, "locales", "languages_dict.yaml")
 with open(
-    f"{current_dir}/locales/languages_dict.yaml",
+    languages_dict_path,
     "r",
     encoding=f"{getenv('TEXT_TEMPLATES_FILE_ENCODING')}",
 ) as f:
@@ -19,8 +20,13 @@ text_templates = None
 def load_text_templates(lang_code):
     if lang_code is None:
         lang_code = "ru"
+
+    curr_language_path = path.join(
+        current_dir, "locales", "languages", f"{lang_code}.yaml"
+    )
+
     with open(
-        f"{current_dir}/locales/languages/{lang_code}.yaml",
+        curr_language_path,
         "r",
         encoding=f"{getenv('TEXT_TEMPLATES_FILE_ENCODING')}",
     ) as f:
