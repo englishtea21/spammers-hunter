@@ -1,18 +1,16 @@
-BOT_TOKEN = "Your telegram bot api token"
+BOT_TOKEN="your telegram bot api"
 
-DB_URL = "Your db url"    
+POSTGRES_DB=mydatabase
+POSTGRES_USER=myuser
+POSTGRES_PASSWORD=mypassword
 
+DEFAULT_LANGUAGE="ru"
+LANGUAGES_DIR_PATH="aiogram-bot\text_utils\locales\languages"
+LANGUAGES_DICT_PATH="aiogram-bot\text_utils\locales\languages_dict.yaml"
+TEXT_TEMPLATES_FILE_ENCODING="utf8"
 
-DEFAULT_LANGUAGE = "ru or en"
+REPOSITORY_LINK="https://github.com/englishtea21/spammers-hunter"
 
-LANGUAGES_DIR_PATH = "aiogram-bot\text_utils\locales\languages"
+TOKENIZER_PATH="aiogram-bot\spam_detection\tokenizer"
+MODEL_PATH="aiogram-bot\spam_detection\model"
 
-LANGUAGES_DICT_PATH = "aiogram-bot\text_utils\locales\languages_dict.yaml"
-
-
-REPOSITORY_LINK = "https://github.com/englishtea21/spammers-hunter"
-
-
-TOKENIZER_PATH = "aiogram-bot\spam_detection\tokenizer"
-
-MODEL_PATH = "aiogram-bot\spam_detection\model"
