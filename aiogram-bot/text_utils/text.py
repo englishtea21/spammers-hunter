@@ -23,7 +23,7 @@ def load_text_templates(lang_code):
 
     lang_file = f"{lang_code}.yaml"
 
-    curr_language_path = path.join(current_dir, "locales", "languages", lang_file)
+    curr_language_path = path.join(current_dir, "locales", "languages", "ru.yaml")
 
     with open(
         curr_language_path,
