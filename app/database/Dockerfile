@@ -2,7 +2,7 @@
 FROM postgres:16-alpine
 
 # Копируем скрипт инициализации базы данных в контейнер
-COPY ./init-db.sh /docker-entrypoint-initdb.d/
+COPY ./init-db.sh /docker-entrypoint-init-db.d/
 
 # Делаем скрипт исполняемым
-RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh
+RUN chmod +x /docker-entrypoint-init-db.d/init-db.sh

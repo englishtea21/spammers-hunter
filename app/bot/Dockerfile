@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Устанавливаем рабочую директорию
-WORKDIR /app
+WORKDIR /project
 
 # Копируем зависимости и устанавливаем их
 COPY requirements.txt ./
@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Указываем команду для запуска приложения
-CMD ["python", "aiogram-bot/app.py"]
+CMD ["python", "app/main.py"]
