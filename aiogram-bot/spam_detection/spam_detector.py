@@ -5,16 +5,16 @@ import os
 
 # implements basic interface of spam detector
 
+current_dir = os.path.dirname(__file__)
+
 
 class SpamDetector:
     def __init__(self):
         # Initialize tokenizer and model
 
-        self.tokenizer = DistilBertTokenizer.from_pretrained(
-            os.getenv("TOKENIZER_PATH")
-        )
+        self.tokenizer = DistilBertTokenizer.from_pretrained(f"{current_dir}/tokenizer")
         self.model = DistilBertForSequenceClassification.from_pretrained(
-            os.getenv("MODEL_PATH")
+            f"{current_dir}/model"
         )
 
         # Set the device for model inference

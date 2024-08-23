@@ -1,11 +1,13 @@
-from os import getenv
+from os import getenv, path
 import yaml
 
 # implements localization
 
+current_dir = path.dirname(__file__)
+
 # load languages dict
 with open(
-    f"{getenv('LANGUAGES_DICT_PATH')}",
+    f"{current_dir}/locales/languages_dict.yaml",
     "r",
     encoding=f"{getenv('TEXT_TEMPLATES_FILE_ENCODING')}",
 ) as f:
@@ -18,7 +20,7 @@ def load_text_templates(lang_code):
     if lang_code is None:
         lang_code = "ru"
     with open(
-        f"{getenv('LANGUAGES_DIR_PATH')}/{lang_code}.yaml",
+        f"{current_dir}/locales/languages/{lang_code}.yaml",
         "r",
         encoding=f"{getenv('TEXT_TEMPLATES_FILE_ENCODING')}",
     ) as f:
