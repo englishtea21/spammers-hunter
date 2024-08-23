@@ -2,7 +2,7 @@ version: '3.7'
 services:
   db:
     build:
-      context: app\database\
+      context: app/database/
     env_file:
       - ./.env
     volumes:
@@ -13,7 +13,7 @@ services:
 
   bot:
     build: 
-      context: app\bot\
+      context: app/bot/
     env_file:
       - ./.env
     environment:
