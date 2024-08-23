@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /project
 
 # Копируем зависимости и устанавливаем их
-COPY ../../requirements.txt ./
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Копируем исходный код приложения
