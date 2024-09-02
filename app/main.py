@@ -19,6 +19,9 @@ from bot.handlers.admin_group import admin_group_router
 from bot.handlers.admin_private import admin_private_router
 from bot.handlers.bot_group import bot_group_router
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from database.processing import clean_database
+
 from bot.spam_detection.spam_detector import SpamDetector
 
 
@@ -44,6 +47,12 @@ async def on_startup(bot):
         await drop_db()
 
     await create_db()
+
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(
+        clean_database, "interval", seconds=10, kwargs={"bot": bot}
+    )  # Запускать каждый день
+    scheduler.start()
 
 
 async def on_shutdown(bot):

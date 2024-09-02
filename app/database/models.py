@@ -90,7 +90,7 @@ class AntiSpamChat(Base):
     # The duration of the punishment is determined by the number of hours provided.
     # If the punishment is for an indefinite period, it will be indicated as "none".
     punishment_duration: Mapped[int] = mapped_column(
-        BigInteger, nullable=True, default=60 * 60 * 24
+        BigInteger, nullable=True, default=24
     )
 
     banned_users: Mapped[list[BannedUser]] = relationship(
