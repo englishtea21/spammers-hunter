@@ -48,11 +48,11 @@ async def on_startup(bot):
 
     await create_db()
 
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(
-        clean_database, "interval", seconds=10, kwargs={"bot": bot}
+    db_scheduler = AsyncIOScheduler()
+    db_scheduler.add_job(
+        clean_database, "interval", seconds=10, name="Cleaning db",kwargs={"bot": bot}
     )  # Запускать каждый день
-    scheduler.start()
+    db_scheduler.start()
 
 
 async def on_shutdown(bot):
