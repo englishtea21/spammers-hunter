@@ -15,9 +15,10 @@ class ChatTypeFilter(Filter):
 
 # for group chats
 class AdminOrOwnerFilter(Filter):
-    async def __call__(self, message: types.Message, bot: Bot) -> bool:
+    async def __call__(self, message: types.Message) -> bool:
         chat_id = message.chat.id
         user_id = message.from_user.id
+        bot = message.bot
 
         try:
             chat_member = await bot.get_chat_member(chat_id, user_id)
@@ -32,4 +33,5 @@ class AdminOrOwnerFilter(Filter):
 class AdminPrivateFilter(Filter):
     async def __call__(self, message: types.Message, session: AsyncSession) -> bool:
         user_id = message.from_user.id
-        return await orm_is_user_admin(session, user_id)
+        bot = message.bot
+        return await orm_is_user_admin(session, user_id, bot)

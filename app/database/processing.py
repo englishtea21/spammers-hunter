@@ -10,6 +10,10 @@ from sqlalchemy import select, update, delete, exists, not_, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.engine import session_maker
+from database.orm_query import (
+    orm_get_expired_chat_admin_ids,
+    orm_get_expired_anti_spam_chat_ids,
+)
 
 
 async def clean_database(bot: Bot):
@@ -19,21 +23,29 @@ async def clean_database(bot: Bot):
 
 
 async def clean_chats_and_admins(session: AsyncSession, bot: Bot):
-    chat_ids = await session.execute(select(AntiSpamChat))  # Получаем все чаты
-    chat_ids = chat_ids.scalars().all()  # Извлекаем результаты
+    admin_ids_to_delete = await orm_get_expired_chat_admin_ids(session, bot)
+    if admin_ids_to_delete:
+        await session.execute(
+            delete(ChatAdmin).where(ChatAdmin.id.in_(admin_ids_to_delete))
+        )
+        await session.commit()
 
-    for chat in chat_ids:
-        try:
-            await bot.get_chat(chat.chat_id)  # Проверяем, существует ли чат
-        except Exception:
-            # Удаляем запись
-            await session.execute(
-                delete(ChatAdmin).where(ChatAdmin.chat_id == chat.chat_id)
-            )
-            await session.execute(
-                delete(AntiSpamChat).where(AntiSpamChat.chat_id == chat.chat_id)
-            )
-    await session.commit()  # Коммитим изменения
+    chat_ids_to_delete = await orm_get_expired_anti_spam_chat_ids(session, bot)
+    if chat_ids_to_delete:
+        await session.execute(
+            delete(AntiSpamChat).where(AntiSpamChat.chat_id.in_(chat_ids_to_delete))
+        )
+        await session.commit()  # Коммитим изменения
+
+    # if chats_to_delete:
+    #     # Удаляем записи из ChatAdmin и AntiSpamChat
+    #     await session.execute(
+    #         delete(ChatAdmin).where(ChatAdmin.chat_id.in_(chats_to_delete))
+    #     )
+    #     await session.execute(
+    #         delete(AntiSpamChat).where(AntiSpamChat.chat_id.in_(chats_to_delete))
+    #     )
+    #     await session.commit()  # Коммитим изменения
 
 
 async def clean_banned_users(session: AsyncSession):

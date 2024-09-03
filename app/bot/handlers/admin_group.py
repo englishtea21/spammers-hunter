@@ -8,7 +8,7 @@ from bot.filters.chat_types import ChatTypeFilter, AdminOrOwnerFilter
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.orm_query import (
-    orm_add_admin_chat,
+    orm_add_chat_admin,
     orm_add_anti_spam_chat,
     orm_get_anti_spam_chat,
     orm_update_anti_spam_chat,
@@ -39,29 +39,29 @@ async def start_spam_hunting(message: types.Message, bot: Bot, session: AsyncSes
         await message.answer(text.text_templates["IN_GROUP"]["RIGHTS_REQUIRED"])
         return
 
-    obj = await orm_get_anti_spam_chat(session, chat_id)
+    # obj = await orm_get_anti_spam_chat(session, chat_id)
 
-    if obj is None:
-        try:
-            await orm_add_anti_spam_chat(session, {"chat_id": chat_id})
+    # if obj is None:
+    try:
+        await orm_add_anti_spam_chat(session, {"chat_id": chat_id})
 
-            admins = await bot.get_chat_administrators(chat_id)
-            for admin in admins:
-                if admin.user.id == bot.id:
-                    continue
-                await orm_add_admin_chat(
-                    session, {"chat_id": chat_id, "user_id": admin.user.id}
-                )
+        admins = await bot.get_chat_administrators(chat_id)
+        for admin in admins:
+            if admin.user.id == bot.id:
+                continue
+            await orm_add_chat_admin(
+                session, {"chat_id": chat_id, "user_id": admin.user.id}
+            )
 
-        except Exception as ex:
-            await message.answer(text.text_templates["ERRORS"]["CANT_GET_ADMINS"])
-            print(ex)
+    except Exception as ex:
+        await message.answer(text.text_templates["ERRORS"]["CANT_GET_ADMINS"])
+        print(ex)
 
-    elif obj.is_enabled:
-        await message.answer(text.text_templates["IN_GROUP"]["IS_ALREADY_ENABLED"])
-        return
-    else:
-        await orm_toggle_anti_spam_chat_is_enabled(session, chat_id)
+    # elif obj.is_enabled:
+    # await message.answer(text.text_templates["IN_GROUP"]["IS_ALREADY_ENABLED"])
+    # return
+    # else:
+    await orm_toggle_anti_spam_chat_is_enabled(session, chat_id)
 
     await message.answer(
         text.text_templates["IN_GROUP"]["SPAMMERS_HUNTING_STARTED_SUCCESSFULLY"]

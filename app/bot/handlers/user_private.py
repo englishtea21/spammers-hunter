@@ -87,7 +87,7 @@ async def help_cmd(message: types.Message, session: AsyncSession):
 async def to_admin_mode_cmd(
     message: types.Message, session: AsyncSession, state: FSMContext
 ):
-    if not await orm_is_user_admin(session, message.from_user.id):
+    if not await orm_is_user_admin(session, message.from_user.id, message.bot):
         await message.answer(
             text.text_templates["USER_PRIVATE_CHAT"]["ANSWERS"][
                 "FIRSTLY_ADD_ME_TO_YOUR_CHATS"

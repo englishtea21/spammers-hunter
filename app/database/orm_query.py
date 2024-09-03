@@ -1,3 +1,8 @@
+from aiogram import Bot
+from aiogram.types.chat_member_administrator import ChatMemberAdministrator
+from aiogram.types.chat_member_owner import ChatMemberOwner
+from aiogram.exceptions import TelegramForbiddenError
+
 from sqlalchemy import select, update, delete, exists, not_, and_
 
 from sqlalchemy import (
@@ -42,9 +47,12 @@ def get_till_time(duration: int):
     return get_server_time() + timedelta(hours=duration)
 
 
-async def orm_add_admin_chat(session: AsyncSession, data: dict):
+async def orm_add_chat_admin(session: AsyncSession, data: dict):
     chat_id = data["chat_id"]
     user_id = data["user_id"]
+
+    cache_key = f"admin_user_status_{user_id}"
+    region.set(cache_key, True)
 
     # checks whether the instance presents
     stmt = select(ChatAdmin).filter_by(chat_id=chat_id, user_id=user_id)
@@ -60,11 +68,7 @@ async def orm_add_admin_chat(session: AsyncSession, data: dict):
 
     session.add(obj)
 
-    try:
-        await session.commit()
-    except SQLAlchemyError as ex:
-        print(ex)
-        await session.rollback()
+    await session.commit()
 
 
 async def orm_delete_admin_chat(session: AsyncSession, admin_id: int):
@@ -84,18 +88,34 @@ async def orm_get_admin_chats(session: AsyncSession, admin_id: int):
 
 
 # checks whether a bot user is an admin in any antispam chat
-async def orm_is_user_admin(session: AsyncSession, user_id: int) -> bool:
+async def orm_is_user_admin(session: AsyncSession, user_id: int, bot: Bot) -> bool:
     cache_key = f"admin_user_status_{user_id}"
     obj = region.get(cache_key)
 
     if obj is None or isinstance(obj, NoValue):
-        stmt = select(exists().where(ChatAdmin.user_id == user_id))
+        # Проверяем базу данных на наличие информации о пользователе
+        stmt = select(ChatAdmin).where(ChatAdmin.user_id == user_id)
         result = await session.execute(stmt)
-        obj = result.scalar_one_or_none()
-        if obj is not None:
-            region.set(cache_key, obj)
+        chat_admins = result.scalars().all()
 
-    return obj
+        # Проверяем доступность чатов и актуальность информации
+        admin_status = False
+        for chat_admin in chat_admins:
+            try:
+                chat_member = await bot.get_chat_member(chat_admin.chat_id, user_id)
+                if isinstance(chat_member, (ChatMemberOwner, ChatMemberAdministrator)):
+                    admin_status = True
+                    break
+            except TelegramForbiddenError:
+                # Логируем исключение, если необходимо, для отладки
+                continue
+
+        # Обновляем кэш
+        region.set(cache_key, admin_status)
+    else:
+        admin_status = obj
+
+    return admin_status
 
 
 async def orm_add_anti_spam_chat(session: AsyncSession, data: dict):
@@ -184,6 +204,42 @@ async def orm_toggle_anti_spam_chat_punishment(session: AsyncSession, chat_id: i
         # invalidates cache if data has changed
         cache_key = f"anti_spam_chat_{chat_id}"
         region.delete(cache_key)
+
+
+async def orm_get_expired_anti_spam_chat_ids(session: AsyncSession, bot: Bot):
+    chats = await session.execute(select(AntiSpamChat.id))
+    chats = chats.scalars().all()
+
+    # Проверяем, что пользователи являются админами в своих чатах
+    chat_ids_to_delete = set()
+    for chat in chats:
+        try:
+            await bot.get_chat(chat.id)
+        except TelegramForbiddenError:
+            chat_ids_to_delete.add(chat.chat_id)
+
+    return chat_ids_to_delete
+
+
+async def orm_get_expired_chat_admin_ids(session: AsyncSession, bot: Bot):
+    chat_admins = await session.execute(select(ChatAdmin))
+    chat_admins = chat_admins.scalars().all()
+
+    # Проверяем, что пользователи являются админами в своих чатах
+    chat_admin_ids_to_delete = set()
+    for chat_admin in chat_admins:
+        try:
+            chat_member = await bot.get_chat_member(
+                chat_admin.chat_id, chat_admin.user_id
+            )
+            if isinstance(chat_member, (ChatMemberOwner, ChatMemberAdministrator)):
+                pass
+            else:
+                chat_admin_ids_to_delete.add(chat_admin.id)
+        except TelegramForbiddenError:
+            chat_admin_ids_to_delete.add(chat_admin.id)
+
+    return chat_admin_ids_to_delete
 
 
 async def orm_add_banned_user(

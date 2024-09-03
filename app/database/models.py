@@ -11,7 +11,6 @@ from sqlalchemy import (
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from enum import Enum
-import datetime
 
 
 class Base(DeclarativeBase):
